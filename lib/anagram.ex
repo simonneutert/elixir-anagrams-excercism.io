@@ -7,8 +7,7 @@ defmodule Anagram do
   end
 
   def match(word, word_input) when is_binary(word_input) do
-    a = match_one(word, word_input)
-    a
+    match_one(word, word_input)
   end
 
   # private
