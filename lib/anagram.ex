@@ -1,12 +1,34 @@
 defmodule Anagram do
-  def match(word, word_list) do
-    # public API
-    filter_by_letter_count_and_duplicates(word, word_list)
+
+  # public API
+
+  def match(word, word_input) when is_list(word_input) do
+    match_multi(word, word_input)
+  end
+
+  def match(word, word_input) when is_binary(word_input) do
+    a = match_one(word, word_input)
+    a
+  end
+
+  # private
+
+  defp match_one(word, word_input) do
+    match_multi(word, [word_input])
+  end
+
+  defp match_multi(word, word_list) do
+    match_res = filter_by_letter_count_and_duplicates(word, word_list)
     |> build_bool_masks(word)
     |> apply_bool_masks()
     |> build_key_value_pairs()
     |> apply_rule_set()
     |> map_results()
+
+    case match_res do
+      [] -> "No match"
+      _ -> "#{word} <-> #{Enum.join(match_res, ", ")}"
+    end
   end
 
   defp sort_string(x) do
